@@ -1,0 +1,40 @@
+
+
+a. Given the social security number of a professor, list the titles, classrooms,
+meeting days and time of his/her classes
+
+<Professor Queries>
+
+SELECT P.Ptitle, SC.Classroom, M.Day, SC.Begin_time, SC.End_time
+FROM Professor AS P, Section AS SC, Meeting AS M
+WHERE P.SSN = SC.P_SSN AND SC.Section_number = M.Section_Number
+
+b.  Given a course number and a section number, count how many students get each distinct grade, i.e.  ‘A’, ‘A-’, ‘B+’, ‘B’, ‘B-’, etc.
+
+(This needs Course Number AND Section Number)
+
+SELECT E.Grade, Count(*)
+FROM Enrollment AS E, Course AS C, Section AS SC, Meeting AS M
+WHERE S.Section_number = M.Section_Number AND M.Course_ID = C.Course_ID AND E.Section_Number = SC.Section_number AND E.Grade = "A" OR E.Grade = "A-" OR E.Grade = "B+" OR E.Grade = "B" OR E.Grade = "B-" OR E.Grade = "C+" AND E.Grade = "C" OR E.Grade = "C-" OR E.Grade = "D+" OR E.Grade = "D" OR E.Grade = "D-" OR E.Grade = "F"
+GROUP BY E.Grade
+
+<Students Queries>
+
+a. Given a course number list the sections of the course, including the classrooms, the meeting days and time, and the number of students enrolled in
+each section
+
+(This only needs the Course Number)
+
+SELECT SC.Section_number, SC.Classroom, M.Day, SC.Begin_time, SC.End_time, S.CWID, Count(*)
+FROM Student AS S, Enrollment AS E, Section AS SC, Meeting AS M, Course AS C
+WHERE C.Course_ID = M.Course_ID AND M.Section_Number = SC.Section_number AND S.CWID = E.Student_CWID AND E.Section_Number = SC.Section_number
+GROUP BY S.CWID
+
+b. Given the campus wide ID of a student, list all courses the student took
+and the grades.
+
+(This only needs the student's CWID)
+
+SELECT C.Course_ID, E.Grade
+FROM Student AS S, Enrollment AS E, Section AS SC, Meeting AS M, Course AS C
+WHERE S.CWID = E.Student_CWID AND E.Section_Number = SC.Section_number AND SC.Section_number = M.Section_Number AND M.Course_ID = C.Course_ID
